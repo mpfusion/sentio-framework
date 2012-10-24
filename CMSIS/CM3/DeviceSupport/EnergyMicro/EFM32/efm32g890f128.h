@@ -83,7 +83,7 @@ typedef enum IRQn
   VCMP_IRQn             = 26, /*!< VCMP Interrupt */
   LCD_IRQn              = 27, /*!< LCD Interrupt */
   MSC_IRQn              = 28, /*!< MSC Interrupt */
-  AES_IRQn              = 29, /*!< AES Interrupt */
+  AES_IRQn              = 29 /*!< AES Interrupt */
 } IRQn_Type;
 
 /**************************************************************************//**

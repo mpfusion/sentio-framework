@@ -184,6 +184,8 @@ time time::operator= ( const time &source )
 	var.config.date   = source.var.config.date;
 	var.config.month  = source.var.config.month;
 	var.config.year   = source.var.config.year;
+
+	return time(var.config.second, var.config.minute, var.config.hour);
 }
 
 bool time::operator< ( const time input )

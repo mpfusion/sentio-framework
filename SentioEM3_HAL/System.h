@@ -16,7 +16,7 @@ typedef enum{
 	buttonEvent_1	 = 0x01,
 	buttonEvent_2    = 0x02,
 	buttonEvent_3    = 0x03,
-	buttonEvent_4    = 0x04,
+	buttonEvent_4    = 0x04
 }BUTTON_EVENT;
 
 typedef enum{

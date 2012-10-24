@@ -29,6 +29,9 @@
 
 #include "efm32_assert.h"
 
+/* an empty translation unit is not allowed in C */
+char unused;
+
 #if defined(DEBUG_EFM)
 
 /***************************************************************************//**

@@ -96,6 +96,8 @@ void DebugInterface::initializeInterface( uint32_t numberOfLEDs, uint32_t number
 		GPIO_PinModeSet( digi2, gpioModePushPull, 0 );
 	case 1:
 		GPIO_PinModeSet( digi1, gpioModePushPull, 0 );
+	default:
+		;
 	}
 
 	// Configuration of Pushbuttons on the Debug/Gateway

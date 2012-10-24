@@ -41,7 +41,7 @@ typedef enum
 	alarmOncePerSecond                 = 0x0F,
 	alarmMatchSeconds                  = 0x0E,
 	alarmMatchMinutes_Seconds          = 0x0C,
-	alarmMatchHour_Minutes_Seconds     = 0x08,
+	alarmMatchHour_Minutes_Seconds     = 0x08
 } ALARM_REG_SETTING;
 
 

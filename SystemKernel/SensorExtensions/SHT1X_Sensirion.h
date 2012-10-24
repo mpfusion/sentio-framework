@@ -44,7 +44,7 @@ private:
 	};
 	enum {TEMP,HUMI};
 
-	volatile void delayDriver();
+	void delayDriver();
 	uint8_t s_write_byte( uint8_t value );
 	uint8_t s_read_byte( uint8_t ack );
 

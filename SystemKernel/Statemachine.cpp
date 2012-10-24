@@ -125,6 +125,9 @@ ERROR_CODE Statemachine::startApplication( STATUS_BLOCK *statusBlock )
 
 void Statemachine::_wrapperIRQ_default( uint32_t test )
 {
+	// to avoid compiler warning
+	if (test){;}
+
 	while(1);
 }
 

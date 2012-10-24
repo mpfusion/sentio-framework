@@ -37,8 +37,8 @@ RTC_DS3234::RTC_DS3234()
 	rtcUSART 				= _RTC_USART;
 
 	// Initialize Register-Settings
-	statusRegisterValue     = 0b11001000;
-	controlRegisterValue    = 0b00011100;
+	statusRegisterValue     = 0xc8; // 0b11001000
+	controlRegisterValue    = 0x1c; // 0b00011100
 }
 
 
@@ -188,8 +188,8 @@ void RTC_DS3234::initializeInternalRTC( bool startRTC, bool enableISR, bool COMP
 
 void RTC_DS3234::setDefaultConfig()
 {
-	setSystemRegister(0x0E,0b00000100);
-	setSystemRegister(0x0F,0b01111000);
+	setSystemRegister(0x0E, 0x04); // 0b00000100
+	setSystemRegister(0x0F, 0x78); // 0b01111000
 }
 
 
