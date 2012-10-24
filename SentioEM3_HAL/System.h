@@ -2,7 +2,7 @@
  * system.h
  *
  *  Created on: Feb 17, 2011
- *      Author: Matthias Kr‰mer
+ *      Author: Matthias Kr√§mer
  */
 
 #ifndef SYSTEM_H_

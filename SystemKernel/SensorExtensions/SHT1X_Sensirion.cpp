@@ -306,11 +306,11 @@ uint8_t SHT1X_Sensirion::s_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_
 
 
 //----------------------------------------------------------------------------------
-// calculates temperature [�C] and humidity [%RH]
+// calculates temperature [°C] and humidity [%RH]
 // input :  humi [Ticks] (12 bit)
 //          temp [Ticks] (14 bit)
 // output:  humi [%RH]
-//          temp [�C]
+//          temp [°C]
 //----------------------------------------------------------------------------------
 
 /****************************************************************************************************************************************//**
@@ -337,22 +337,22 @@ void SHT1X_Sensirion::calc_sth11(float *p_humidity ,float *p_temperature)
 	float t = *p_temperature;           // t:       Temperature [Ticks] 14 Bit
 	float rh_lin;                       // rh_lin:  Humidity linear
 	float rh_true;                      // rh_true: Temperature compensated humidity
-	float t_C;                          // t_C   :  Temperature [�C]
+	float t_C;                          // t_C   :  Temperature [°C]
 
-	t_C=t*0.01 - 40.3;     				//calc. temperature[�C]from 14 bit temp.ticks
+	t_C=t*0.01 - 40.3;     				//calc. temperature[°C]from 14 bit temp.ticks
 	rh_lin=C3*rh*rh + C2*rh + C1;     	//calc. humidity from ticks to [%RH]
 	rh_true=(t_C-25)*(T1+T2*rh)+rh_lin; //calc. temperature compensated humidity [%RH]
 	if(rh_true>100)rh_true=100;       	//cut if the value is outside of
 	if(rh_true<0.1)rh_true=0.1;       	//the physical possible range
 
-	*p_temperature=t_C;      //return temperature [�C]
+	*p_temperature=t_C;      //return temperature [°C]
 	*p_humidity=rh_true;     //return humidity[%RH]
 }
 
 //--------------------------------------------------------------------
 // calculates dew point
-// input:   humidity [%RH], temperature [�C]
-// output:  dew point [�C]
+// input:   humidity [%RH], temperature [°C]
+// output:  dew point [°C]
 //--------------------------------------------------------------------
 
 /****************************************************************************************************************************************//**

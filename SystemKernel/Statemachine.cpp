@@ -2,7 +2,7 @@
  * statemachine.cpp
  *
  *  Created on: May 13, 2011
- *      Author: Matthias Kr�mer
+ *      Author: Matthias Krämer
  */
 
 #include "Statemachine.h"

@@ -2,7 +2,7 @@
  * Debug.cpp
  *
  *  Created on: Jan 21, 2011
- *      Author: Matthias Kr�mer
+ *      Author: Matthias Krämer
  */
 
 #include "efm32.h"

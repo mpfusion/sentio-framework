@@ -2,7 +2,7 @@
  * Statemachine.h
  *
  *  Created on: May 11, 2011
- *      Author: Matthias Kr�mer
+ *      Author: Matthias Krämer
  */
 
 #ifndef STATEMACHINE_H_

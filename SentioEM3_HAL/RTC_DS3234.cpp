@@ -2,7 +2,7 @@
  * RTC_DS3234.cpp
  *
  *  Created on: Mar 13, 2011
- *      Author: Matthias Kr�mer
+ *      Author: Matthias Krämer
  */
 
 #include "SystemConfig.h"
@@ -127,7 +127,7 @@ void RTC_DS3234::initializeMCU_Interrupt()
 
 void RTC_DS3234::initialize32kHzClock( bool batteryBacked, bool enableLFA, bool enableLFB )
 {
-	// Configure the Pin PB 8 as Input, this pin can be used to drive the EFM32�s internal LFXO path
+	// Configure the Pin PB 8 as Input, this pin can be used to drive the EFM32s internal LFXO path
 	// (Set the LFXO as clock-source and set the "CMU_CTRL_LFXOMODE_DIGEXTCLK" Bit in the CMU's CTRL-Register)
 	// More Information can be found In the EFM32 Reference Manual in the section CMU -> Register Description
 	GPIO_PinModeSet( gpioPortB, 8, gpioModeInputPull, 1 );
@@ -630,7 +630,7 @@ bool RTC_DS3234::resetOscillatorStopFlag()
  *  This method is used to configure the System-Time, the time bases of the DS3234.
  *
  * @details
- * The following parameters are specified within the S�STEMTIME-structure
+ * The following parameters are specified within the SYSTEMTIME-structure
 		uint8_t seconds
 		uint8_t minutes
 		uint8_t hours
@@ -924,7 +924,7 @@ void RTC_DS3234::getTemperature( float *temperature )
 
 /****************************************************************************************************************************************//**
  * @brief
- *  The method writes a single byte to a specific address of the DS3234�s internal SRAM
+ *  The method writes a single byte to a specific address of the DS3234s internal SRAM
  *
  * @param[in]
  *  uint8_t: SRAM-Address which will be written
@@ -943,7 +943,7 @@ void RTC_DS3234::writeToSRAM( uint8_t address, uint8_t data )
 
 /****************************************************************************************************************************************//**
  * @brief
- *  The method reads a single byte to a specific address of the DS3234�s internal SRAM
+ *  The method reads a single byte to a specific address of the DS3234s internal SRAM
  *
  * @param[in]
  *  uint8_t: SRAM-Address which will be written

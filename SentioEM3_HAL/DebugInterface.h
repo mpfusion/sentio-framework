@@ -2,7 +2,7 @@
  * Debug.h
  *
  *  Created on: Jan 21, 2011
- *      Author: Matthias Kr�mer
+ *      Author: Matthias Krämer
  */
 
 #ifndef DEBUG_H_

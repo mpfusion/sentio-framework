@@ -2,7 +2,7 @@
  * RTC.h
  *
  *  Created on: Mar 13, 2011
- *      Author: Matthias Kr�mer
+ *      Author: Matthias Krämer
  */
 
 #ifndef RTC_DS3234_H_
