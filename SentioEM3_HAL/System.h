@@ -11,31 +11,33 @@
 #include "SystemConfig.h"
 
 
-typedef enum{
+enum BUTTON_EVENT
+{
 	buttonEventReset = 0x00,
-	buttonEvent_1	 = 0x01,
+	buttonEvent_1    = 0x01,
 	buttonEvent_2    = 0x02,
 	buttonEvent_3    = 0x03,
 	buttonEvent_4    = 0x04
-}BUTTON_EVENT;
+};
 
-typedef enum{
-	useInitialState   = 0x00,
-	useRecallState    = 0x01,
-	selectInISR       = 0x02
-}RECALL_OPTION;
+enum RECALL_OPTION
+{
+	useInitialState = 0x00,
+	useRecallState  = 0x01,
+	selectInISR     = 0x02
+};
 
-struct STATUS_BLOCK{
-	uint8_t 		numberOfStates;
-	uint8_t 		numberOfISR;
-	uint8_t 		initialState;
-	uint8_t 		recallState;
-	uint8_t 		nextState;
-	uint8_t 	   	sleepMode;
-	uint8_t 	   	applicationID;
-	RECALL_OPTION  	recallOption;
-	bool    		wantToSleep;
-	bool   			restoreClockSetting;
+struct STATUS_BLOCK
+{
+	uint8_t       numberOfISR;
+	uint8_t       initialState;
+	uint8_t       recallState;
+	uint8_t       nextState;
+	uint8_t       sleepMode;
+	uint8_t       applicationID;
+	RECALL_OPTION recallOption;
+	bool          wantToSleep;
+	bool          restoreClockSetting;
 };
 
 
@@ -46,12 +48,13 @@ struct STATUS_BLOCK{
  *  ISR-Functions be specified and can be changed at RUNTIME!!!
  *
  *******************************************************************************************************************************************/
-typedef void (*ptISR_Handler) (uint32_t);
+typedef void ( *ptISR_Handler )( uint32_t );
 
-struct ISR_ARRAY{
+struct ISR_ARRAY
+{
 	ptISR_Handler function;
 	uint8_t       interruptNumber;
-	bool		  anchorISR;
+	bool          anchorISR;
 };
 
 
@@ -64,8 +67,8 @@ struct ISR_ARRAY{
 class System
 {
 public:
-	System(){}
-	~System(){}
+	System() {}
+	~System() {}
 
 	void initializeSentioEM();
 
