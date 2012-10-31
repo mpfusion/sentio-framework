@@ -38,11 +38,12 @@ class SHT1X_Sensirion
 {
 private:
 
-	union INPUT_VAR{
+	union INPUT_VAR
+	{
 		uint8_t in[2];
 		uint16_t out;
 	};
-	enum {TEMP,HUMI};
+	enum {TEMP, HUMI};
 
 	void delayDriver();
 	uint8_t s_write_byte( uint8_t value );
@@ -55,13 +56,13 @@ private:
 	uint8_t s_read_statusreg( uint8_t *p_value, uint8_t *p_checksum );
 	uint8_t s_write_statusreg( uint8_t *p_value );
 
-	uint8_t s_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_t mode);
-	void  calc_sth11(float *p_humidity , float *p_temperature);
+	uint8_t s_measure( uint8_t *p_value, uint8_t *p_checksum, uint8_t mode );
+	void  calc_sth11( float *p_humidity , float *p_temperature );
 	float calc_dewpoint( float h, float t );
 
 public:
-	SHT1X_Sensirion(){};
-	~SHT1X_Sensirion(){};
+	SHT1X_Sensirion() {};
+	~SHT1X_Sensirion() {};
 
 	void initializeInterface();
 	void setLowPowerMode();

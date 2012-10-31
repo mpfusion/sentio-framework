@@ -17,14 +17,14 @@
 
 void SHT1X_Sensirion::initializeInterface()
 {
-	GPIO_PinModeSet( SHT_DataPin, gpioModeWiredAndPullUpFilter, 0);
-	GPIO_PinModeSet( SHT_SCK_Pin, gpioModePushPull, 0);
+	GPIO_PinModeSet( SHT_DataPin, gpioModeWiredAndPullUpFilter, 0 );
+	GPIO_PinModeSet( SHT_SCK_Pin, gpioModePushPull, 0 );
 }
 
 void SHT1X_Sensirion::setLowPowerMode()
 {
-	GPIO_PinModeSet( SHT_DataPin, gpioModeDisabled, 0);
-	GPIO_PinModeSet( SHT_SCK_Pin, gpioModeDisabled, 0);
+	GPIO_PinModeSet( SHT_DataPin, gpioModeDisabled, 0 );
+	GPIO_PinModeSet( SHT_SCK_Pin, gpioModeDisabled, 0 );
 }
 
 /****************************************************************************************************************************************//**
@@ -33,7 +33,7 @@ void SHT1X_Sensirion::setLowPowerMode()
  *
  *******************************************************************************************************************************************/
 
-volatile void SHT1X_Sensirion::delayDriver()
+void SHT1X_Sensirion::delayDriver()
 {
 	volatile uint8_t test = 0;
 #if SentioEM_CPU_Clock_MHZ > 28
@@ -64,7 +64,7 @@ uint8_t SHT1X_Sensirion::s_write_byte( uint8_t value )
 {
 	uint8_t i, error = 0;
 
-	for ( i=0x80; i > 0; i /= 2 )           //shift bit for masking
+	for ( i = 0x80; i > 0; i /= 2 )         //shift bit for masking
 	{
 		if ( i & value )
 			GPIO_PinOutSet( SHT_DataPin );  //masking value with i , write to SENSI-BUS
@@ -73,9 +73,10 @@ uint8_t SHT1X_Sensirion::s_write_byte( uint8_t value )
 
 		delayDriver();                   //observe setup time
 		GPIO_PinOutSet( SHT_SCK_Pin );   //clk for SENSI-BUS
-		delayDriver(); delayDriver();    //pulswith approx. 5 us
+		delayDriver();
+		delayDriver();    //pulswith approx. 5 us
 		GPIO_PinOutClear( SHT_SCK_Pin );
-		delayDriver();                        			//observe hold time
+		delayDriver();                                  //observe hold time
 	}
 
 	GPIO_PinOutSet( SHT_DataPin );        //release DATA-line
@@ -104,7 +105,7 @@ uint8_t SHT1X_Sensirion::s_read_byte( uint8_t ack )
 	for ( i = 0x80; i > 0; i /= 2 )         //shift bit for masking
 	{
 		GPIO_PinOutSet( SHT_SCK_Pin );      //clk for SENSI-BUS
-		 delayDriver();
+		delayDriver();
 		if ( GPIO_PinInGet( SHT_DataPin ) ) //read bit
 			val = ( val | i );
 
@@ -116,14 +117,15 @@ uint8_t SHT1X_Sensirion::s_read_byte( uint8_t ack )
 
 	//DATA = !ack;                    //in case of "ack==1" pull down DATA-Line
 
-	if(ack)
+	if ( ack )
 		GPIO_PinOutClear( SHT_DataPin );
 
 	delayDriver();                   //observe setup time
 
 	GPIO_PinOutSet( SHT_SCK_Pin );   //clk #9 for ack
 
-	delayDriver(); delayDriver();    //pulswith approx. 5 us
+	delayDriver();
+	delayDriver();    //pulswith approx. 5 us
 
 	GPIO_PinOutClear( SHT_SCK_Pin );
 
@@ -162,7 +164,10 @@ void SHT1X_Sensirion::s_transstart()
 	GPIO_PinOutClear( SHT_DataPin );
 	delayDriver();
 	GPIO_PinOutClear( SHT_SCK_Pin );
-	delayDriver();delayDriver();delayDriver();delayDriver();
+	delayDriver();
+	delayDriver();
+	delayDriver();
+	delayDriver();
 	GPIO_PinOutSet( SHT_SCK_Pin );
 	delayDriver();
 	GPIO_PinOutSet( SHT_DataPin );
@@ -191,7 +196,7 @@ void SHT1X_Sensirion::s_connectionreset()
 
 	GPIO_PinOutClear( SHT_SCK_Pin );
 
-	for( volatile uint8_t i = 0; i < 18; i++)
+	for ( volatile uint8_t i = 0; i < 18; i++ )
 	{
 		GPIO_PinOutToggle( SHT_SCK_Pin );
 		delayDriver();
@@ -229,7 +234,7 @@ uint8_t SHT1X_Sensirion::s_softreset()
 
 uint8_t SHT1X_Sensirion::s_read_statusreg( uint8_t *p_value, uint8_t *p_checksum )
 {
-	uint8_t error=0;
+	uint8_t error = 0;
 
 	s_transstart();                       //transmission start
 	error = s_write_byte( STATUS_REG_R ); //send command to sensor
@@ -249,15 +254,15 @@ uint8_t SHT1X_Sensirion::s_read_statusreg( uint8_t *p_value, uint8_t *p_checksum
 
 uint8_t SHT1X_Sensirion::s_write_statusreg( uint8_t *p_value )
 {
-  uint8_t error = 0;
+	uint8_t error = 0;
 
-  s_transstart();                       //transmission start
+	s_transstart();                       //transmission start
 
-  error += s_write_byte( STATUS_REG_W );//send command to sensor
+	error += s_write_byte( STATUS_REG_W );//send command to sensor
 
-  error += s_write_byte( *p_value );    //send value of status register
+	error += s_write_byte( *p_value );    //send value of status register
 
-  return error;                         //error>=1 in case of no response form the sensor
+	return error;                         //error>=1 in case of no response form the sensor
 }
 
 
@@ -267,39 +272,41 @@ uint8_t SHT1X_Sensirion::s_write_statusreg( uint8_t *p_value )
  *
  *******************************************************************************************************************************************/
 
-uint8_t SHT1X_Sensirion::s_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_t mode)
+uint8_t SHT1X_Sensirion::s_measure( uint8_t *p_value, uint8_t *p_checksum, uint8_t mode )
 {
-	uint8_t error=0;
+	uint8_t error = 0;
 	uint32_t i;
 
 	s_transstart(); //transmission start
 
-	switch( mode )
-	{              //send command to sensor
+	switch ( mode )
+	{
+		//send command to sensor
 	case TEMP:
 		error += s_write_byte( MEASURE_TEMP );
 		break;
 
-    case HUMI:
-    	error += s_write_byte( MEASURE_HUMI );
-    	break;
+	case HUMI:
+		error += s_write_byte( MEASURE_HUMI );
+		break;
 
-    default:
-    	break;
+	default:
+		break;
 	}
 
-	for (i=0; i < 15000000; i++)				//wait until sensor has finished the measurement
-	{										// or timeout is reached
-		if( !( GPIO_PinInGet( SHT_DataPin ) ) )
+	for ( i = 0; i < 15000000; i++ )            //wait until sensor has finished the measurement
+	{
+		// or timeout is reached
+		if ( !( GPIO_PinInGet( SHT_DataPin ) ) )
 			break;
 	}
 
-	if(GPIO_PinInGet( SHT_DataPin ) )
+	if ( GPIO_PinInGet( SHT_DataPin ) )
 		error += 1;
 
-	*(p_value +1) = s_read_byte(ACK);  //read the first byte (MSB)
-	*(p_value)    = s_read_byte(ACK);  //read the second byte (LSB)
-	*p_checksum   = s_read_byte(noACK);//read checksum
+	*( p_value + 1 ) = s_read_byte( ACK ); //read the first byte (MSB)
+	*( p_value )    = s_read_byte( ACK ); //read the second byte (LSB)
+	*p_checksum   = s_read_byte( noACK ); //read checksum
 
 	return error;
 }
@@ -324,7 +331,7 @@ uint8_t SHT1X_Sensirion::s_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_
  * The User should not change the Initialization-Values for System-Variables which are not related to the Hardware-Interfaces
  *******************************************************************************************************************************************/
 
-void SHT1X_Sensirion::calc_sth11(float *p_humidity ,float *p_temperature)
+void SHT1X_Sensirion::calc_sth11( float *p_humidity , float *p_temperature )
 {
 
 	const float C1 = -2.0468;           // for 12 Bit RH
@@ -339,14 +346,14 @@ void SHT1X_Sensirion::calc_sth11(float *p_humidity ,float *p_temperature)
 	float rh_true;                      // rh_true: Temperature compensated humidity
 	float t_C;                          // t_C   :  Temperature [°C]
 
-	t_C=t*0.01 - 40.3;     				//calc. temperature[°C]from 14 bit temp.ticks
-	rh_lin=C3*rh*rh + C2*rh + C1;     	//calc. humidity from ticks to [%RH]
-	rh_true=(t_C-25)*(T1+T2*rh)+rh_lin; //calc. temperature compensated humidity [%RH]
-	if(rh_true>100)rh_true=100;       	//cut if the value is outside of
-	if(rh_true<0.1)rh_true=0.1;       	//the physical possible range
+	t_C = t * 0.01 - 40.3;              //calc. temperature[°C]from 14 bit temp.ticks
+	rh_lin = C3 * rh * rh + C2 * rh + C1; //calc. humidity from ticks to [%RH]
+	rh_true = ( t_C - 25 ) * ( T1 + T2 * rh ) + rh_lin; //calc. temperature compensated humidity [%RH]
+	if ( rh_true > 100 )rh_true = 100;  //cut if the value is outside of
+	if ( rh_true < 0.1 )rh_true = 0.1;  //the physical possible range
 
-	*p_temperature=t_C;      //return temperature [°C]
-	*p_humidity=rh_true;     //return humidity[%RH]
+	*p_temperature = t_C;    //return temperature [°C]
+	*p_humidity = rh_true;   //return humidity[%RH]
 }
 
 //--------------------------------------------------------------------
@@ -367,11 +374,12 @@ void SHT1X_Sensirion::calc_sth11(float *p_humidity ,float *p_temperature)
  *******************************************************************************************************************************************/
 
 float SHT1X_Sensirion::calc_dewpoint( float h, float t )
-{ float k,dew_point ;
+{
+	float k, dew_point ;
 
-  k = (log10(h)-2)/0.4343 + (17.62*t)/(243.12+t);
-  dew_point = 243.12*k/(17.62-k);
-  return dew_point;
+	k = ( log10( h ) - 2 ) / 0.4343 + ( 17.62 * t ) / ( 243.12 + t );
+	dew_point = 243.12 * k / ( 17.62 - k );
+	return dew_point;
 }
 
 
@@ -383,32 +391,32 @@ float SHT1X_Sensirion::calc_dewpoint( float h, float t )
 
 uint8_t SHT1X_Sensirion::getMeasurement( float &humidity, float &temperature )
 {
-	INPUT_VAR humid,temp;
+	INPUT_VAR humid, temp;
 	float bufferHumid, bufferTemp;
-	unsigned char error,checksum;
+	unsigned char error, checksum;
 
 	s_connectionreset();
 
 	error = 0;
-	error += s_measure(humid.in,&checksum,HUMI);  //measure humidity
-	error += s_measure(temp.in, &checksum,TEMP);  //measure temperature
+	error += s_measure( humid.in, &checksum, HUMI ); //measure humidity
+	error += s_measure( temp.in, &checksum, TEMP ); //measure temperature
 
 
-	if( error != 0 )
+	if ( error != 0 )
 	{
-	   	s_connectionreset();        //in case of an error: connection reset
+		s_connectionreset();        //in case of an error: connection reset
 	}
 
 	else
 	{
-		bufferHumid = (float) humid.out;
-		bufferTemp  = (float) temp.out;
+		bufferHumid = ( float ) humid.out;
+		bufferTemp  = ( float ) temp.out;
 
-	    calc_sth11(&bufferHumid,&bufferTemp);            //calculate humidity, temperature
+		calc_sth11( &bufferHumid, &bufferTemp );         //calculate humidity, temperature
 	}
 
 	humidity = bufferHumid;
-	temperature= bufferTemp;
+	temperature = bufferTemp;
 
 	return error;
 }
@@ -416,28 +424,28 @@ uint8_t SHT1X_Sensirion::getMeasurement( float &humidity, float &temperature )
 
 uint8_t SHT1X_Sensirion::getMeasurement( uint16_t &humidity, uint16_t &temperature )
 {
-	INPUT_VAR humid,temp;
+	INPUT_VAR humid, temp;
 	float bufferHumid, bufferTemp;
-	unsigned char error,checksum;
+	unsigned char error, checksum;
 
 	s_connectionreset();
 
 	error = 0;
-	error += s_measure(humid.in,&checksum,HUMI);  //measure humidity
-	error += s_measure(temp.in, &checksum,TEMP);  //measure temperature
+	error += s_measure( humid.in, &checksum, HUMI ); //measure humidity
+	error += s_measure( temp.in, &checksum, TEMP ); //measure temperature
 
 
-	if( error != 0 )
+	if ( error != 0 )
 	{
-	   	s_connectionreset();        //in case of an error: connection reset
+		s_connectionreset();        //in case of an error: connection reset
 	}
 
 	else
 	{
-		humidity = (float) humid.out;
-		temperature  = (float) temp.out;
+		humidity = ( float ) humid.out;
+		temperature  = ( float ) temp.out;
 
-	    calc_sth11(&bufferHumid,&bufferTemp);            //calculate humidity, temperature
+		calc_sth11( &bufferHumid, &bufferTemp );         //calculate humidity, temperature
 	}
 
 	return error;
@@ -451,7 +459,7 @@ uint8_t SHT1X_Sensirion::getMeasurement( uint16_t &humidity, uint16_t &temperatu
 
 float SHT1X_Sensirion::getDewpoint()
 {
-	float h,t;
+	float h, t;
 
 	getMeasurement( h, t );
 
