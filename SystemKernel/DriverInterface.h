@@ -11,6 +11,7 @@
 
 #include "DebugInterface.h"
 #include "RTC_DS3234.h"
+#include "AnalogInput.h"
 #include "System.h"
 #include "SensorExtensions/SHT1X_Sensirion.h"
 
@@ -21,6 +22,7 @@ public:
 	static RTC_DS3234      timer;
 	static System          sentio;
 	static SHT1X_Sensirion humid;
+	static AnalogInput     luminance;
 
 	static void codeError();
 

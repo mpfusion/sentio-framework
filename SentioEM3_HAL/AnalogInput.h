@@ -11,23 +11,24 @@
 #include "efm32_adc.h"
 #include "efm32_gpio.h"
 
-typedef enum{
+enum SENSORS
+{
 	radiationSensor
-}SENSORS;
+};
 
 
 class AnalogInput
 {
 
 private:
-	ADC_Init_TypeDef 		init;
-	ADC_InitScan_TypeDef 	scan;
+	ADC_Init_TypeDef        init;
+	ADC_InitScan_TypeDef    scan;
 	ADC_InitSingle_TypeDef  single;
-	uint32_t				calirationValue;
+	uint32_t                calirationValue;
 
 public:
-	AnalogInput(){}
-	~AnalogInput(){}
+	AnalogInput() {}
+	~AnalogInput() {}
 
 	void initializeInterface();
 
@@ -38,7 +39,7 @@ public:
 	void readChannel( ADC_SingleInput_TypeDef channel, float &data );
 
 	void enableSensor( SENSORS input );
-	void disableSensor( SENSORS  input);
+	void disableSensor( SENSORS  input );
 
 	void initializeSensorEN( SENSORS input );
 
