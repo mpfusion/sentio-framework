@@ -1,3 +1,3 @@
 [submodule "em_cmsis"]
 	path = em_cmsis
-	url = git@github.com:mpfusion/sentio-cmsis.git
+	url = git://github.com/mpfusion/sentio-cmsis.git
