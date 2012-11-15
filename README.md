@@ -12,7 +12,7 @@ This code is intended to be included as a submodule in a Sentio application.
 The code can be neither compiled nor executed on its own. Nevertheless, to
 inspect the code or make changes it can be cloned.
 
-    git clone git@github.com:mpfusion/sentio-framework.git
+    git clone git://github.com/mpfusion/sentio-framework.git
 
 
 Install
