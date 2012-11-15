@@ -13,6 +13,7 @@ RTC_DS3234      DriverInterface::timer;
 System          DriverInterface::sentio;
 SHT1X_Sensirion DriverInterface::humid;
 AnalogInput     DriverInterface::luminance;
+LTC2990         DriverInterface::ltc2990;
 
 void DriverInterface::codeError()
 {

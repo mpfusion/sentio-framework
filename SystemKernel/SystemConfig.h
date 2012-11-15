@@ -51,6 +51,7 @@
 #define _SENSIRION_
 #define _INTERNAL_ADC_
 #define _EMULATORBORD_
+#define _CONF_EH_
 
 #define SentioEM_Revision     	     3
 #define SentioEM_CPU_Clock_MHZ	     32
@@ -361,6 +362,23 @@
 #define PinResistorH auxIO_Port, _resistor_H
 
 #define TimerLoadEmulation	 TIMER1_IRQn
+
+#endif
+
+/****************************************************************************************************************************************//**
+ * @brief ConfEH
+ *
+ *******************************************************************************************************************************************/
+
+#ifdef _CONF_EH_
+
+#define enableMAX17710_AE	gpioPortD, 4
+#define enableMAX17710_LCE	gpioPortD, 5
+#define enableLTC3105 		gpioPortE, 6
+#define enableTXS0102		gpioPortE, 7
+#define enableLoad_6mA		gpioPortE, 3
+#define enableLoad_20mA		gpioPortE, 4
+#define enableLoad_40mA		gpioPortE, 5
 
 #endif
 
