@@ -14,7 +14,7 @@
 #include "System.h"
 #include "RTC_DS3234.h"
 #include "SHT1X_Sensirion.h"
-#include "LTC2990.h"
+#include "ConfEH.h"
 
 
 class DriverInterface {
@@ -25,6 +25,7 @@ public:
 	static SHT1X_Sensirion humid;
 	static AnalogInput     luminance;
 	static LTC2990         ltc2990;
+	static CONFEH          confeh;
 
 	static void codeError();
 
