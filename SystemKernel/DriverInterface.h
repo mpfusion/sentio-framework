@@ -15,6 +15,7 @@
 #include "RTC_DS3234.h"
 #include "SHT1X_Sensirion.h"
 #include "ConfEH.h"
+#include "XBEE_Radio.h"
 
 
 class DriverInterface {
@@ -26,6 +27,7 @@ public:
 	static AnalogInput     luminance;
 	static LTC2990         ltc2990;
 	static CONFEH          confeh;
+	static XBEE_Radio      radio;
 
 	static void codeError();
 
