@@ -18,16 +18,25 @@
 
 /****************************************************************************************************************************************//**
  * @brief
+ *  Make sure the Oscillator is stable
+ *
+ *******************************************************************************************************************************************/
+
+#define stableWait 4000
+
+
+/****************************************************************************************************************************************//**
+ * @brief
  *  Definitions of DS3234 System Register Addresses
  *
  *******************************************************************************************************************************************/
 
-#define	controlRegisterAddr  0x0E
-#define	statusRegisterAddr   0x0F
+#define controlRegisterAddr  0x0E
+#define statusRegisterAddr   0x0F
 #define agingCoefficientAddr 0x10
 #define batteryBackedAddr    0x13
-#define SRAM_Addr			 0x18
-#define SRAM_Data			 0x19
+#define SRAM_Addr            0x18
+#define SRAM_Data            0x19
 
 
 /****************************************************************************************************************************************//**
@@ -49,7 +58,7 @@ typedef enum
 {
 	alarm1 = 0x01,
 	alarm2 = 0x02
-}ALARM_NUMBER;
+} ALARM_NUMBER;
 
 
 /****************************************************************************************************************************************//**
@@ -64,7 +73,7 @@ typedef enum
 	square_1024Hz = 0x01,
 	square_4096Hz = 0x02,
 	square_8192Hz = 0x03
-}SQUAREW;
+} SQUAREW;
 
 
 /****************************************************************************************************************************************//**
@@ -75,11 +84,11 @@ typedef enum
 
 typedef enum
 {
-	seconds_64     =  ( 0x00 << 4 ),
-	seconds_128    =  ( 0x01 << 4 ),
-	seconds_256    =  ( 0x02 << 4 ),
-	seconds_512    =  ( 0x03 << 4 )
-}TEMP_CONV;
+	seconds_64     = ( 0x00 << 4 ),
+	seconds_128    = ( 0x01 << 4 ),
+	seconds_256    = ( 0x02 << 4 ),
+	seconds_512    = ( 0x03 << 4 )
+} TEMP_CONV;
 
 
 /****************************************************************************************************************************************//**
@@ -106,8 +115,8 @@ struct INTERRUPT_CONFIG
 
 struct OUTPUT_32KHZ
 {
-	bool	enable32kHz;
-	bool	enableBatteryBacked32kHz;
+	bool    enable32kHz;
+	bool    enableBatteryBacked32kHz;
 };
 
 
@@ -120,23 +129,23 @@ struct OUTPUT_32KHZ
 class RTC_DS3234
 {
 private:
-	uint32_t				rtcLocation;
-	USART_InitSync_TypeDef 	interfaceInit;
-	USART_TypeDef 		   	*rtcUSART  ;
+	uint32_t                rtcLocation;
+	USART_InitSync_TypeDef  interfaceInit;
+	USART_TypeDef           *rtcUSART  ;
 
 	uint8_t                 statusRegisterValue;
-	uint8_t					controlRegisterValue;
+	uint8_t                 controlRegisterValue;
 
-	uint8_t calculateTimeReg(uint8_t time);
-	uint8_t calculateInverseTimeReg(uint8_t timeReg);
+	uint8_t calculateTimeReg( uint8_t time );
+	uint8_t calculateInverseTimeReg( uint8_t timeReg );
 
 
 public:
 	RTC_DS3234();
-	~RTC_DS3234(){}
+	~RTC_DS3234() {}
 
-	uint8_t getSystemRegister(uint8_t address);
-	void    setSystemRegister(uint8_t address, uint8_t data);
+	uint8_t getSystemRegister( uint8_t address );
+	void    setSystemRegister( uint8_t address, uint8_t data );
 
 	void initializeInterface();
 	void initializeMCU_Interrupt();
@@ -189,12 +198,12 @@ public:
 	void getTemperature( uint8_t *temperature );
 
 	void writeToSRAM( uint8_t address, uint8_t data );
-	void readFromSRAM( uint8_t address, uint8_t *data);
+	void readFromSRAM( uint8_t address, uint8_t *data );
 
 
 	void setControlRegister( uint8_t control );
 	void setStatusRegister( uint8_t status );
-	void batteryBackedTemperatureConv(bool status);
+	void batteryBackedTemperatureConv( bool status );
 
 };
 

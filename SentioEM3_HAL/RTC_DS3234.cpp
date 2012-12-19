@@ -27,14 +27,14 @@ RTC_DS3234::RTC_DS3234()
 	interfaceInit.baudrate  = _RTC_baudrate;
 	interfaceInit.clockMode = _RTC_clockMode;
 	interfaceInit.databits  = _RTC_databits;
-	interfaceInit.enable 	= _RTC_enable;
+	interfaceInit.enable    = _RTC_enable;
 	interfaceInit.refFreq   = _RTC_refFreq;
-	interfaceInit.master 	= _RTC_master;
-	interfaceInit.msbf  	= _RTC_msbf;
+	interfaceInit.master    = _RTC_master;
+	interfaceInit.msbf      = _RTC_msbf;
 
 	// Define the USART-Number and the Location of the Module-Pins
-	rtcLocation 			= _RTC_Location;
-	rtcUSART 				= _RTC_USART;
+	rtcLocation             = _RTC_Location;
+	rtcUSART                = _RTC_USART;
 
 	// Initialize Register-Settings
 	statusRegisterValue     = 0xc8; // 0b11001000
@@ -64,10 +64,10 @@ void RTC_DS3234::initializeInterface()
 	USART_Enable( rtcUSART, usartEnable );
 
 	// Set the Routing Register (Location and used Pins are specified)of the USART used for communication to the DS3234
-	rtcUSART->ROUTE = USART_ROUTE_RXPEN|	// Enable the MISO-Pin
-					  USART_ROUTE_TXPEN|	// Enable the MOSI-Pin
-					  USART_ROUTE_CLKPEN|	// Enable the SPI-Clock Pin
-					  USART_ROUTE_CSPEN|	// Enable the SPI-Modules Chip-Select pin
+	rtcUSART->ROUTE = USART_ROUTE_RXPEN |   // Enable the MISO-Pin
+					  USART_ROUTE_TXPEN |   // Enable the MOSI-Pin
+					  USART_ROUTE_CLKPEN |  // Enable the SPI-Clock Pin
+					  USART_ROUTE_CSPEN |   // Enable the SPI-Modules Chip-Select pin
 					  rtcLocation;
 
 	// The Chip-Select is controlled by the USART module automatically, no Software Interaction is required
@@ -92,7 +92,7 @@ void RTC_DS3234::initializeInterface()
 	GPIO_PinOutSet( _RTC_VDD_PIN );
 
 	//Make sure the Oscillator is stable
-	for( volatile uint32_t i=0; i<4000; i++);
+	for ( volatile uint32_t i = 0; i < stableWait; i++ );
 }
 
 
@@ -134,21 +134,21 @@ void RTC_DS3234::initialize32kHzClock( bool batteryBacked, bool enableLFA, bool 
 
 	statusRegisterValue &= 0xB7;
 
-	if(batteryBacked)
+	if ( batteryBacked )
 		statusRegisterValue |= 0x08;
 	else
 		statusRegisterValue |= 0x48;
 
 	setSystemRegister( statusRegisterAddr, statusRegisterValue );
 
-	CMU->CTRL |= ( (CMU->CTRL) | CMU_CTRL_LFXOMODE_DIGEXTCLK );
+	CMU->CTRL |= ( ( CMU->CTRL ) | CMU_CTRL_LFXOMODE_DIGEXTCLK );
 
 	CMU_ClockEnable( cmuClock_CORELE, true );
 
-	if( enableLFA )
+	if ( enableLFA )
 		CMU_ClockSelectSet( cmuClock_LFA, cmuSelect_LFXO );
 
-	if( enableLFB )
+	if ( enableLFB )
 		CMU_ClockSelectSet( cmuClock_LFB, cmuSelect_LFXO );
 }
 
@@ -162,7 +162,7 @@ void RTC_DS3234::initialize32kHzClock( bool batteryBacked, bool enableLFA, bool 
  *
  *******************************************************************************************************************************************/
 
-void RTC_DS3234::initializeInternalRTC( bool startRTC, bool enableISR, bool COMP0_isTopValue  )
+void RTC_DS3234::initializeInternalRTC( bool startRTC, bool enableISR, bool COMP0_isTopValue )
 {
 	RTC_Init_TypeDef init;
 
@@ -172,7 +172,7 @@ void RTC_DS3234::initializeInternalRTC( bool startRTC, bool enableISR, bool COMP
 
 	RTC_Init( &init );
 
-	if( enableISR )
+	if ( enableISR )
 	{
 		NVIC_EnableIRQ( RTC_IRQn );
 		RTC_IntEnable( RTC_IFC_COMP0 );
@@ -188,8 +188,8 @@ void RTC_DS3234::initializeInternalRTC( bool startRTC, bool enableISR, bool COMP
 
 void RTC_DS3234::setDefaultConfig()
 {
-	setSystemRegister(0x0E, 0x04); // 0b00000100
-	setSystemRegister(0x0F, 0x78); // 0b01111000
+	setSystemRegister( 0x0E, 0x04 ); // 0b00000100
+	setSystemRegister( 0x0F, 0x78 ); // 0b01111000
 }
 
 
@@ -203,7 +203,7 @@ void RTC_DS3234::setLowPowerMode()
 {
 	// When the VDD_RTC is disconnected the DS3234 reduces the current consumption.
 	// Remember that BatteryBacked Operation needs to be enabled.
-	GPIO_PinOutClear( gpioPortA,8 );
+	GPIO_PinOutClear( gpioPortA, 8 );
 }
 
 
@@ -229,8 +229,8 @@ void RTC_DS3234::resetInterrupts()
  *   bool    interruptControl;
  *   bool    enableAlarm1;
  *   bool    enableAlarm2;
- *	 bool    enableBatteryBackedSQW;
- *	 SQUAREW squareWaveFrequency;
+ *   bool    enableBatteryBackedSQW;
+ *   SQUAREW squareWaveFrequency;
  *
  * @param[in]
  *  INTERRUPT_CONFIG: struct that contains the new set of parameters, which will be written to the DS3234
@@ -243,7 +243,7 @@ void RTC_DS3234::setInterruptConfig( INTERRUPT_CONFIG interruptConfig )
 	uint8_t temp = 0;
 	temp |= interruptConfig.enableBatteryBackedSQW;
 	temp <<= 3;
-	temp |= (uint8_t) interruptConfig.squareWaveFrequency;
+	temp |= ( uint8_t ) interruptConfig.squareWaveFrequency;
 	temp <<= 1;
 	temp |= interruptConfig.interruptControl;
 	temp <<= 1;
@@ -254,7 +254,7 @@ void RTC_DS3234::setInterruptConfig( INTERRUPT_CONFIG interruptConfig )
 	temp |= ( controlRegisterValue & 0x80 );
 	controlRegisterValue = temp;
 
-	setSystemRegister(controlRegisterAddr, controlRegisterValue);
+	setSystemRegister( controlRegisterAddr, controlRegisterValue );
 }
 
 
@@ -267,8 +267,8 @@ void RTC_DS3234::setInterruptConfig( INTERRUPT_CONFIG interruptConfig )
  *   bool    interruptControl;
  *   bool    enableAlarm1;
  *   bool    enableAlarm2;
- *	 bool    enableBatteryBackedSQW;
- *	 SQUAREW squareWaveFrequency;
+ *   bool    enableBatteryBackedSQW;
+ *   SQUAREW squareWaveFrequency;
  *
  * @param[out]
  *  INTERRUPT_CONFIG: pointer to struct, that contains the register-values, which are read out from the DS3234
@@ -288,7 +288,7 @@ void RTC_DS3234::getInterruptConfig( INTERRUPT_CONFIG *interruptConfig )
 	interruptConfig->interruptControl = ( temp & 0x01 );
 	temp >>= 1;
 
-	interruptConfig->squareWaveFrequency = (SQUAREW) ( temp & 0x03 );
+	interruptConfig->squareWaveFrequency = ( SQUAREW )( temp & 0x03 );
 	temp >>= 2;
 
 	interruptConfig->enableBatteryBackedSQW = ( temp & 0x01 );
@@ -303,12 +303,12 @@ void RTC_DS3234::getInterruptConfig( INTERRUPT_CONFIG *interruptConfig )
  *  uint8_t: Number of the Alarm-Flag that will be read-out
  *
  * @return
- * 	bool: Status of the Alarm-Flag
+ *  bool: Status of the Alarm-Flag
  *******************************************************************************************************************************************/
 
 bool RTC_DS3234::getAlarmStatusFlag( uint8_t alarm )
 {
-	if(alarm == 1)
+	if ( alarm == 1 )
 	{
 		return ( getSystemRegister( statusRegisterAddr ) & 0x01 );
 	}
@@ -324,10 +324,10 @@ bool RTC_DS3234::getAlarmStatusFlag( uint8_t alarm )
  * @details
  *  The following Alarm-Matching Configurations are possible:
  *  alarmOncePerSecond                 = 0x0F,
- *	alarmMatchSeconds                  = 0x0E,
- *	alarmMatchMinutes_Seconds          = 0x0C,
- *	alarmMatchHour_Minutes_Seconds     = 0x08,
- *	alarmMatchDay_Hour_Minutes_Seconds = 0x00
+ *  alarmMatchSeconds                  = 0x0E,
+ *  alarmMatchMinutes_Seconds          = 0x0C,
+ *  alarmMatchHour_Minutes_Seconds     = 0x08,
+ *  alarmMatchDay_Hour_Minutes_Seconds = 0x00
  *
  * @return
  *  uint8_t: Status of the Matching-Configuration Registers
@@ -340,17 +340,22 @@ uint8_t RTC_DS3234::getAlarmMatchingConfig( uint8_t alarm )
 	uint8_t RTC_AddressOffset = 0;
 	uint8_t MSB_SettingTemp = 0;
 
-	switch( alarm )
+	switch ( alarm )
 	{
-	case 1:  RTC_AddressOffset = 0x07; break;
-	case 2:  RTC_AddressOffset = 0x0B; break;
-	default: alarm = 5;
+	case 1:
+		RTC_AddressOffset = 0x07;
+		break;
+	case 2:
+		RTC_AddressOffset = 0x0B;
+		break;
+	default:
+		alarm = 5;
 	}
 
-	for( uint8_t i = 0; i < ( 5 - alarm ) ; i++ )
+	for ( uint8_t i = 0; i < ( 5 - alarm ) ; i++ )
 	{
 
-		if( ( getSystemRegister( RTC_AddressOffset + i )  & 0x80 ) )
+		if ( ( getSystemRegister( RTC_AddressOffset + i )  & 0x80 ) )
 		{
 			MSB_SettingTemp |= ( 0x01 << i );
 
@@ -358,7 +363,7 @@ uint8_t RTC_DS3234::getAlarmMatchingConfig( uint8_t alarm )
 
 	}
 
-	return (ALARM_REG_SETTING) MSB_SettingTemp;
+	return ( ALARM_REG_SETTING ) MSB_SettingTemp;
 }
 
 
@@ -373,7 +378,7 @@ uint8_t RTC_DS3234::getAlarmMatchingConfig( uint8_t alarm )
 
 void RTC_DS3234::setBatteryBackedTempConv( bool status )
 {
-	setSystemRegister ( batteryBackedAddr, status );
+	setSystemRegister( batteryBackedAddr, status );
 }
 
 
@@ -400,9 +405,9 @@ bool RTC_DS3234::getBatteyBackedTempConv()
 
 bool RTC_DS3234::forceManualTempConv()
 {
-	if( !( getSystemRegister( statusRegisterAddr ) & 0x03 ) )
+	if ( !( getSystemRegister( statusRegisterAddr ) & 0x03 ) )
 	{
-		setSystemRegister ( controlRegisterAddr, ( controlRegisterValue | 0x20 ) );
+		setSystemRegister( controlRegisterAddr, ( controlRegisterValue | 0x20 ) );
 		return true;
 	}
 	else
@@ -416,8 +421,8 @@ bool RTC_DS3234::forceManualTempConv()
  *
  * @details
  *  The following DS3234-32kHz Configurations are possible:
- *  bool	enable32kHz: enable/disable 32kHz-Output
- *  bool	enableBatteryBacked32kHz: enable/disable 32kHz-Output in lowpower/battery-backed Mode
+ *  bool    enable32kHz: enable/disable 32kHz-Output
+ *  bool    enableBatteryBacked32kHz: enable/disable 32kHz-Output in lowpower/battery-backed Mode
  *
  * @param[in]
  *  OUTPUT_32KHZ: struct that contains the new set of parameters, which will be written to the DS3234
@@ -426,7 +431,7 @@ bool RTC_DS3234::forceManualTempConv()
 
 void RTC_DS3234::set32kHzOutputConfig( OUTPUT_32KHZ config32kHz )
 {
-	statusRegisterValue = ( statusRegisterValue & 0xB7 ) | ( ( ( (uint8_t) config32kHz.enableBatteryBacked32kHz) << 6 ) | ( ( (uint8_t) config32kHz.enable32kHz ) << 3 ) );
+	statusRegisterValue = ( statusRegisterValue & 0xB7 ) | ( ( ( ( uint8_t ) config32kHz.enableBatteryBacked32kHz ) << 6 ) | ( ( ( uint8_t ) config32kHz.enable32kHz ) << 3 ) );
 
 	setSystemRegister( statusRegisterAddr, statusRegisterValue );
 }
@@ -438,8 +443,8 @@ void RTC_DS3234::set32kHzOutputConfig( OUTPUT_32KHZ config32kHz )
  *
  * @details
  *  The following parameters are specified within the 32kHz-Output:
- *  bool	enable32kHz: enable/disable 32kHz-Output
- *  bool	enableBatteryBacked32kHz: enable/disable 32kHz-Output in lowpower/battery-backed Mode
+ *  bool    enable32kHz: enable/disable 32kHz-Output
+ *  bool    enableBatteryBacked32kHz: enable/disable 32kHz-Output in lowpower/battery-backed Mode
  *
  * @param[in]
  *  OUTPUT_32KHZ: pointer to struct, that will contain the register-values, which are read out from the DS3234
@@ -464,9 +469,9 @@ void RTC_DS3234::get32kHzOutputConfig( OUTPUT_32KHZ *config32kHz )
  * @details
  *  The following configurations are possible:
  *  seconds_64
- *	seconds_128
- *	seconds_256
- * 	seconds_512
+ *  seconds_128
+ *  seconds_256
+ *  seconds_512
  *
  * @param[in]
  *  TEMP_CONV: Temperature-Conversion Rate
@@ -475,7 +480,7 @@ void RTC_DS3234::get32kHzOutputConfig( OUTPUT_32KHZ *config32kHz )
 
 void RTC_DS3234::setTempConvRate( TEMP_CONV tempConfig )
 {
-	statusRegisterValue = ( ( statusRegisterValue & 0xCF ) | (uint8_t) tempConfig );
+	statusRegisterValue = ( ( statusRegisterValue & 0xCF ) | ( uint8_t ) tempConfig );
 	setSystemRegister( statusRegisterAddr, statusRegisterValue );
 }
 
@@ -488,9 +493,9 @@ void RTC_DS3234::setTempConvRate( TEMP_CONV tempConfig )
  * @details
  *  The following configurations are possible:
  *  seconds_64
- *	seconds_128
- *	seconds_256
- * 	seconds_512
+ *  seconds_128
+ *  seconds_256
+ *  seconds_512
  *
  * @param[out]
  *  TEMP_CONV: Temperature-Conversion Rate
@@ -499,7 +504,7 @@ void RTC_DS3234::setTempConvRate( TEMP_CONV tempConfig )
 
 void RTC_DS3234::getTempConvRate( TEMP_CONV *tempConfig )
 {
-	*tempConfig = (TEMP_CONV) ( getSystemRegister(statusRegisterAddr) & 0xCF );
+	*tempConfig = ( TEMP_CONV )( getSystemRegister( statusRegisterAddr ) & 0xCF );
 }
 
 
@@ -514,7 +519,7 @@ void RTC_DS3234::getTempConvRate( TEMP_CONV *tempConfig )
 
 bool RTC_DS3234::getTempConvFlag()
 {
-	return ( getSystemRegister(controlRegisterAddr) >> 5 ) & 0x01;
+	return ( getSystemRegister( controlRegisterAddr ) >> 5 ) & 0x01;
 }
 
 
@@ -529,19 +534,19 @@ bool RTC_DS3234::getTempConvFlag()
 
 bool RTC_DS3234::getBusyFlag()
 {
-	return ( getSystemRegister(statusRegisterAddr) >> 2 ) & 0x01;
+	return ( getSystemRegister( statusRegisterAddr ) >> 2 ) & 0x01;
 }
 
 
 void RTC_DS3234::setCrystalAgingOffset( uint8_t agingConfig )
 {
-	setSystemRegister ( agingCoefficientAddr, agingConfig );
+	setSystemRegister( agingCoefficientAddr, agingConfig );
 }
 
 
 uint8_t RTC_DS3234::getCrystalAgingOffset()
 {
-	return getSystemRegister ( agingCoefficientAddr );
+	return getSystemRegister( agingCoefficientAddr );
 }
 
 
@@ -560,7 +565,7 @@ uint8_t RTC_DS3234::getCrystalAgingOffset()
 
 void RTC_DS3234::setOscillatorEnableFlag( bool flagStatus )
 {
-	controlRegisterValue = ( controlRegisterValue & 0x7F ) | ( ( (uint8_t) flagStatus ) << 7 );
+	controlRegisterValue = ( controlRegisterValue & 0x7F ) | ( ( ( uint8_t ) flagStatus ) << 7 );
 	setSystemRegister( controlRegisterAddr, controlRegisterValue );
 }
 
@@ -618,7 +623,7 @@ bool RTC_DS3234::getOscillatorStopFlag()
 
 bool RTC_DS3234::resetOscillatorStopFlag()
 {
-	bool temp =  ( ( getSystemRegister( statusRegisterAddr ) >> 7 ) & 0x01 );
+	bool temp = ( ( getSystemRegister( statusRegisterAddr ) >> 7 ) & 0x01 );
 	setSystemRegister( statusRegisterAddr, ( statusRegisterValue & 0x7F ) );
 
 	return temp;
@@ -631,13 +636,13 @@ bool RTC_DS3234::resetOscillatorStopFlag()
  *
  * @details
  * The following parameters are specified within the SYSTEMTIME-structure
-		uint8_t seconds
-		uint8_t minutes
-		uint8_t hours
-		uint8_t day
-		uint8_t date
-		uint8_t month
-		uint8_t year
+        uint8_t seconds
+        uint8_t minutes
+        uint8_t hours
+        uint8_t day
+        uint8_t date
+        uint8_t month
+        uint8_t year
  *
  * @param[in]
  *  SYSTEMTIME struct that contains the new values of the parameters, which will be written to the DS3234
@@ -652,11 +657,11 @@ bool RTC_DS3234::setBaseTime( time systemTime )
 	uint8_t *arrayAccess = systemTime.getArrayAccess();
 
 	// Perform Write-Access to the DS3234-Base time Registers, which have the Address (0x00 to 0x06)
-	for( uint8_t i = 0; i<7; i++ )
+	for ( uint8_t i = 0; i < 7; i++ )
 	{
 		// The MS-Bit of the Register 0x05 is always high, ( it contains the information, if we are in the 20 or 21th century )
 		// As long as our time-machine is not ordered jet :-) it is quite useless to make this bit dynamic.
-		if( i == 5 )
+		if ( i == 5 )
 			setSystemRegister( i, ( ( calculateTimeReg( arrayAccess[i] ) ) | 0x80 ) );
 		else
 			setSystemRegister( i, ( calculateTimeReg( arrayAccess[i] ) ) );
@@ -673,13 +678,13 @@ bool RTC_DS3234::setBaseTime( time systemTime )
  *
  * @details
  * The following parameters are specified within the SYSTEMTIME-structure
-		uint8_t seconds
-		uint8_t minutes
-		uint8_t hours
-		uint8_t day
-		uint8_t date
-		uint8_t month
-		uint8_t year
+        uint8_t seconds
+        uint8_t minutes
+        uint8_t hours
+        uint8_t day
+        uint8_t date
+        uint8_t month
+        uint8_t year
  *
  * @param[out]
  *  SYSTEMTIME: pointer to struct that contains the values of the parameters, which will be read from the DS3234
@@ -691,7 +696,7 @@ void RTC_DS3234::getBaseTime( time &systemTime )
 	uint8_t *arrayAccess = systemTime.getArrayAccess();
 
 
-	for( uint8_t i = 0; i < 7; i++ )
+	for ( uint8_t i = 0; i < 7; i++ )
 	{
 		arrayAccess[i] = calculateInverseTimeReg( ( getSystemRegister( i ) & 0x7F ) );
 	}
@@ -705,12 +710,12 @@ void RTC_DS3234::getBaseTime( time &systemTime )
  *
  * @details
  * The following parameters are specified within the ALARMTIME-structure
- *	uint8_t seconds
- *	uint8_t minutes
- *	uint8_t hours
- *	uint8_t day
- *	ALARM_REG_SETTING MSB_Setting
- *	uint8_t alarmNumber
+ *  uint8_t seconds
+ *  uint8_t minutes
+ *  uint8_t hours
+ *  uint8_t day
+ *  ALARM_REG_SETTING MSB_Setting
+ *  uint8_t alarmNumber
  *
  * @param[out]
  *  ALARMTIME: struct that contains the new set of parameters, which will be written to the DS3234
@@ -727,32 +732,37 @@ bool RTC_DS3234::setAlarmPeriod( time alarmPeriod, ALARM_NUMBER alarm, ALARM_REG
 	uint8_t RTC_AddressOffset;
 	uint8_t temp;
 
-	switch( alarm )
+	switch ( alarm )
 	{
-	case 1:  RTC_AddressOffset = 0x07; break;
-	case 2:  RTC_AddressOffset = 0x0B; break;
-	default: return false;
+	case 1:
+		RTC_AddressOffset = 0x07;
+		break;
+	case 2:
+		RTC_AddressOffset = 0x0B;
+		break;
+	default:
+		return false;
 	}
 
-	getBaseTime(baseT);
+	getBaseTime( baseT );
 	baseT = baseT + alarmPeriod;
 
 	uint8_t *arrayAccess = baseT.getArrayAccess();
 
 
-	temp = (uint8_t) MSB_Setting;
+	temp = ( uint8_t ) MSB_Setting;
 
 	// Update the control registers of the DS3234 RTC, Alarm1: four registers beginning form the Offset are set,
 	// while Alarm 2 requires just the configuration of three control registers
-	for( uint8_t i = 0; i < ( 5 - alarm ); i++ )
+	for ( uint8_t i = 0; i < ( 5 - alarm ); i++ )
 	{
 		// The MASK of this Registers selects the different Alarm/Matching Options
-		if( temp & 0x01 )
+		if ( temp & 0x01 )
 		{
-			setSystemRegister( ( i + RTC_AddressOffset), calculateTimeReg( arrayAccess[i] ) | 0x80 );
+			setSystemRegister( ( i + RTC_AddressOffset ), calculateTimeReg( arrayAccess[i] ) | 0x80 );
 		}
 		else
-			setSystemRegister( ( i + RTC_AddressOffset), calculateTimeReg( arrayAccess[i] ) );
+			setSystemRegister( ( i + RTC_AddressOffset ), calculateTimeReg( arrayAccess[i] ) );
 
 		// Prepare the Status register value
 		temp >>= 1;
@@ -770,12 +780,12 @@ bool RTC_DS3234::setAlarmPeriod( time alarmPeriod, ALARM_NUMBER alarm, ALARM_REG
  *
  * @details
  * The following parameters are specified within the ALARMTIME-structure
- *	uint8_t seconds
- *	uint8_t minutes
- *	uint8_t hours
- *	uint8_t day
- *	ALARM_REG_SETTING MSB_Setting
- *	uint8_t alarmNumber
+ *  uint8_t seconds
+ *  uint8_t minutes
+ *  uint8_t hours
+ *  uint8_t day
+ *  ALARM_REG_SETTING MSB_Setting
+ *  uint8_t alarmNumber
  *
  * @param[out]
  *  ALARMTIME: struct that contains the new set of parameters, which will be written to the DS3234
@@ -790,33 +800,38 @@ bool RTC_DS3234::setAlarmTime( time alarmTime, ALARM_NUMBER alarm, ALARM_REG_SET
 	uint8_t *arrayAccess = alarmTime.getArrayAccess();
 
 	uint8_t RTC_AddressOffset;
-	uint8_t temp = (uint8_t) MSB_Setting;
+	uint8_t temp = ( uint8_t ) MSB_Setting;
 
-	switch( alarm )
+	switch ( alarm )
 	{
-	case 1:  RTC_AddressOffset = 0x07; break;
-	case 2:  RTC_AddressOffset = 0x0B; break;
-	default: return false;
+	case 1:
+		RTC_AddressOffset = 0x07;
+		break;
+	case 2:
+		RTC_AddressOffset = 0x0B;
+		break;
+	default:
+		return false;
 	}
 
 	// Update the control registers of the DS3234 RTC, Alarm1: four registers beginning form the Offset are set,
 	// while Alarm 2 requires just the configuration of three control registers
-	for( uint8_t i = 0; i < ( 5 - alarm ); i++ )
+	for ( uint8_t i = 0; i < ( 5 - alarm ); i++ )
 	{
 		// The MASK of this Registers selects the different Alarm/Matching Options
-		if( temp & 0x01 )
+		if ( temp & 0x01 )
 		{
-			setSystemRegister( ( i + RTC_AddressOffset), ( calculateTimeReg( arrayAccess[i] ) ) | 0x80 );
+			setSystemRegister( ( i + RTC_AddressOffset ), ( calculateTimeReg( arrayAccess[i] ) ) | 0x80 );
 		}
 		else
-			setSystemRegister( ( i + RTC_AddressOffset), calculateTimeReg( arrayAccess[i] ) );
+			setSystemRegister( ( i + RTC_AddressOffset ), calculateTimeReg( arrayAccess[i] ) );
 
 		// Prepare the Status register value
 		temp >>= 1;
 	}
 
-		// Configuration-Parameters are valid
-		return true;
+	// Configuration-Parameters are valid
+	return true;
 }
 
 
@@ -826,12 +841,12 @@ bool RTC_DS3234::setAlarmTime( time alarmTime, ALARM_NUMBER alarm, ALARM_REG_SET
  *
  * @details
  * The following parameters are specified within the ALARMTIME-structure
- *	uint8_t seconds
- *	uint8_t minutes
- *	uint8_t hours
- *	uint8_t day
- *	ALARM_REG_SETTING MSB_Setting
- *	uint8_t alarmNumber
+ *  uint8_t seconds
+ *  uint8_t minutes
+ *  uint8_t hours
+ *  uint8_t day
+ *  ALARM_REG_SETTING MSB_Setting
+ *  uint8_t alarmNumber
  *
  * @param[out]
  *  ALARMTIME: pointer to struct that contains the values of the parameters, which will be read from the DS3234
@@ -849,18 +864,23 @@ bool RTC_DS3234::getAlarmTime( time &alarmTime, ALARM_NUMBER alarm, ALARM_REG_SE
 
 	uint8_t *arrayAccess = alarmTime.getArrayAccess();
 
-	switch( alarm )
+	switch ( alarm )
 	{
-	case 1:  RTC_AddressOffset = 0x07; break;
-	case 2:  RTC_AddressOffset = 0x0B; break;
-	default: return false;
+	case 1:
+		RTC_AddressOffset = 0x07;
+		break;
+	case 2:
+		RTC_AddressOffset = 0x0B;
+		break;
+	default:
+		return false;
 	}
 
-	for( uint8_t i = 0; i < ( 5 - alarm ) ; i++ )
+	for ( uint8_t i = 0; i < ( 5 - alarm ) ; i++ )
 	{
 		temp = getSystemRegister( RTC_AddressOffset + i );
 
-		if( ( temp  & 0x80) )
+		if ( ( temp  & 0x80 ) )
 		{
 			MSB_SettingTemp |= ( 0x01 << i );
 
@@ -869,7 +889,7 @@ bool RTC_DS3234::getAlarmTime( time &alarmTime, ALARM_NUMBER alarm, ALARM_REG_SE
 		arrayAccess[i] = calculateInverseTimeReg( temp & 0x7F );
 	}
 
-	MSB_Setting = (ALARM_REG_SETTING) MSB_SettingTemp;
+	MSB_Setting = ( ALARM_REG_SETTING ) MSB_SettingTemp;
 
 	return true;
 }
@@ -906,18 +926,18 @@ void RTC_DS3234::getTemperature( float *temperature )
 
 	RegisterValue = getSystemRegister( 0x11 );
 
-	tempTemp = (int32_t)(RegisterValue & 0x7F);
+	tempTemp = ( int32_t )( RegisterValue & 0x7F );
 
-	if(RegisterValue & 0x80)
-		tempTemp *= (-1);
+	if ( RegisterValue & 0x80 )
+		tempTemp *= ( -1 );
 
 	*temperature = tempTemp;
 
 	RegisterValue = getSystemRegister( 0x12 );
 
-	if( RegisterValue & 0x80 )
+	if ( RegisterValue & 0x80 )
 		*temperature += 0.5;
-	if( RegisterValue & 0x40 )
+	if ( RegisterValue & 0x40 )
 		*temperature += 0.25;
 }
 
@@ -936,8 +956,8 @@ void RTC_DS3234::getTemperature( float *temperature )
 
 void RTC_DS3234::writeToSRAM( uint8_t address, uint8_t data )
 {
-	setSystemRegister(SRAM_Addr, address);
-	setSystemRegister(SRAM_Data, data);
+	setSystemRegister( SRAM_Addr, address );
+	setSystemRegister( SRAM_Data, data );
 }
 
 
@@ -953,10 +973,10 @@ void RTC_DS3234::writeToSRAM( uint8_t address, uint8_t data )
  *
  *******************************************************************************************************************************************/
 
-void RTC_DS3234::readFromSRAM( uint8_t address, uint8_t *data)
+void RTC_DS3234::readFromSRAM( uint8_t address, uint8_t *data )
 {
-	setSystemRegister(SRAM_Addr, address);
-	*data = getSystemRegister(SRAM_Data);
+	setSystemRegister( SRAM_Addr, address );
+	*data = getSystemRegister( SRAM_Data );
 }
 
 
@@ -972,7 +992,7 @@ void RTC_DS3234::readFromSRAM( uint8_t address, uint8_t *data)
 void RTC_DS3234::batteryBackedTemperatureConv( bool status )
 {
 	// Perform Write-Access to the DS3234-Configuration Register
-	setSystemRegister( batteryBackedAddr,(uint8_t) status );
+	setSystemRegister( batteryBackedAddr, ( uint8_t ) status );
 }
 
 
@@ -1022,7 +1042,7 @@ uint8_t RTC_DS3234::calculateInverseTimeReg( uint8_t timeReg )
 	uint8_t temp = ( timeReg & 0x0F );
 
 	timeReg >>= 4;
-	return ( temp + ( timeReg * 10) );
+	return ( temp + ( timeReg * 10 ) );
 }
 
 
@@ -1043,17 +1063,17 @@ uint8_t RTC_DS3234::calculateInverseTimeReg( uint8_t timeReg )
 
 inline uint8_t RTC_DS3234::getSystemRegister( uint8_t address )
 {
-	if( !( GPIO_PinInGet( _RTC_VDD_PIN ) ) )
+	if ( !( GPIO_PinInGet( _RTC_VDD_PIN ) ) )
 	{
 		GPIO_PinOutSet( _RTC_VDD_PIN );
-		for( volatile uint32_t i = 0; i < 4000; i++ );
+		for ( volatile uint32_t i = 0; i < stableWait; i++ );
 	}
 
-	USART_TxDouble( rtcUSART,( address << 8 ) );
-	while( !GPIO_PinInGet( _RTC_SPI_CS_PIN ) );
+	USART_TxDouble( rtcUSART, ( address << 8 ) );
+	while ( !GPIO_PinInGet( _RTC_SPI_CS_PIN ) );
 
 
-	return (uint8_t)USART_RxDouble( rtcUSART );
+	return ( uint8_t )USART_RxDouble( rtcUSART );
 }
 
 
@@ -1075,10 +1095,10 @@ inline void RTC_DS3234::setSystemRegister( uint8_t address, uint8_t data )
 {
 	// Make sure the RTC supply is Enabled, when the SPI-Interface is accessed.
 	// In case the RTC-VDD
-	if( !( GPIO_PinInGet( _RTC_VDD_PIN ) ) )
+	if ( !( GPIO_PinInGet( _RTC_VDD_PIN ) ) )
 	{
 		GPIO_PinOutSet( _RTC_VDD_PIN );
-		for( volatile uint32_t i = 0; i < 4000; i++ );
+		for ( volatile uint32_t i = 0; i < stableWait; i++ );
 	}
 
 	// Transfer the 16-Bit Address and Data-Information to the SPI-Interface
@@ -1088,7 +1108,7 @@ inline void RTC_DS3234::setSystemRegister( uint8_t address, uint8_t data )
 
 	// Wait for the Chip select to go high again, to avoid interferences between two Write-Commands to the DS3234
 	// Make the pin selection dynamic to allow different Locations of the USART interface
-	while( !GPIO_PinInGet( _RTC_SPI_CS_PIN ) );
+	while ( !GPIO_PinInGet( _RTC_SPI_CS_PIN ) );
 
 
 
