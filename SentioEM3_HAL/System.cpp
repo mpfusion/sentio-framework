@@ -14,9 +14,6 @@
 #include "System.h"
 
 
-
-
-
 /****************************************************************************************************************************************//**
  * @brief
  *  The method initializes microcontroller clock and IO-pins. The specification is done within the SystemConfig.h
@@ -26,61 +23,61 @@
 void System::initializeSentioEM()
 {
 #if SentioEM_CPU_Clock_MHZ == 32
-	CMU_OscillatorEnable(cmuOsc_HFXO,true,true);
-	CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFXO);
-	CMU_OscillatorEnable(cmuOsc_HFRCO,false,false);
+	CMU_OscillatorEnable( cmuOsc_HFXO, true, true );
+	CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFXO );
+	CMU_OscillatorEnable( cmuOsc_HFRCO, false, false );
 #elif SentioEM_CPU_Clock_MHZ == 1
-	CMU_HFRCOBandSet(cmuHFRCOBand_1MHz);
-	CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFRCO);
-	CMU_OscillatorEnable(cmuOsc_HFXO,false,false);
+	CMU_HFRCOBandSet( cmuHFRCOBand_1MHz );
+	CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFRCO );
+	CMU_OscillatorEnable( cmuOsc_HFXO, false, false );
 #elif SentioEM_CPU_Clock_MHZ == 7
-	CMU_HFRCOBandSet(cmuHFRCOBand_7MHz);
-	CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFRCO);
-	CMU_OscillatorEnable(cmuOsc_HFXO,false,false);
+	CMU_HFRCOBandSet( cmuHFRCOBand_7MHz );
+	CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFRCO );
+	CMU_OscillatorEnable( cmuOsc_HFXO, false, false );
 #elif SentioEM_CPU_Clock_MHZ == 11
-	CMU_HFRCOBandSet(cmuHFRCOBand_11MHz);
-	CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFRCO);
-	CMU_OscillatorEnable(cmuOsc_HFXO,false,false);
+	CMU_HFRCOBandSet( cmuHFRCOBand_11MHz );
+	CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFRCO );
+	CMU_OscillatorEnable( cmuOsc_HFXO, false, false );
 #elif SentioEM_CPU_Clock_MHZ == 14
-	CMU_HFRCOBandSet(cmuHFRCOBand_14MHz);
-	CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFRCO);
-	CMU_OscillatorEnable(cmuOsc_HFXO,false,false);
+	CMU_HFRCOBandSet( cmuHFRCOBand_14MHz );
+	CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFRCO );
+	CMU_OscillatorEnable( cmuOsc_HFXO, false, false );
 #elif SentioEM_CPU_Clock_MHZ == 21
-	CMU_HFRCOBandSet(cmuHFRCOBand_21MHz);
-	CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFRCO);
-	CMU_OscillatorEnable(cmuOsc_HFXO,false,false);
+	CMU_HFRCOBandSet( cmuHFRCOBand_21MHz );
+	CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFRCO );
+	CMU_OscillatorEnable( cmuOsc_HFXO, false, false );
 #elif SentioEM_CPU_Clock_MHZ == 28
-	CMU_HFRCOBandSet(cmuHFRCOBand_28MHz);
-	CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFRCO);
-	CMU_OscillatorEnable(cmuOsc_HFXO,false,false);
+	CMU_HFRCOBandSet( cmuHFRCOBand_28MHz );
+	CMU_ClockSelectSet( cmuClock_HF, cmuSelect_HFRCO );
+	CMU_OscillatorEnable( cmuOsc_HFXO, false, false );
 #endif
 
 #if SentioEM_LF_Clock == INTERN
 	CMU_ClockSelectSet( cmuClock_LFA, cmuSelect_LFRCO );
 
-	CMU_ClockEnable( cmuClock_RTC, true );
 	CMU_ClockEnable( cmuClock_CORELE, true );
 #endif
 
 #if SentioEM_LF_Clock == EXTERN
-	 CMU_OscillatorEnable(cmuOsc_LFRCO, false, false);
+	CMU->CTRL = CMU_CTRL_LFXOMODE_DIGEXTCLK;
 
-	CMU->CTRL =CMU_CTRL_LFXOMODE_DIGEXTCLK;
-	CMU_ClockEnable( cmuClock_CORELE, true );
 #endif
 
-	CMU_ClockEnable(cmuClock_GPIO,true);
+	CMU_ClockEnable( cmuClock_GPIO, true );
 
 #if SentioEM_OnBoard_LEDS == ON
-	GPIO_PinModeSet(gpioPortC,8,gpioModePushPull,0);
-	GPIO_PinModeSet(gpioPortC,9,gpioModePushPull,0);
-	GPIO_PinModeSet(gpioPortC,10,gpioModePushPull,0);
+	GPIO_PinModeSet( gpioPortC, 8, gpioModePushPull, 0 );
+	GPIO_PinModeSet( gpioPortC, 9, gpioModePushPull, 0 );
+	GPIO_PinModeSet( gpioPortC, 10, gpioModePushPull, 0 );
 #endif
+
+	// Disable SD Card Interface
+	GPIO_PinModeSet( gpioPortA, 10, gpioModePushPull, 0 );
 
 
 #if SentioEM_OnBoard_Button == ON
-	GPIO_PinModeSet(gpioPortC,11,gpioModeInputPullFilter,1);
-	GPIO_IntConfig(gpioPortC,11,true,false,true);
+	GPIO_PinModeSet( gpioPortC, 11, gpioModeInputPullFilter, 1 );
+	GPIO_IntConfig( gpioPortC, 11, true, false, true );
 #endif
 
 
@@ -89,8 +86,8 @@ void System::initializeSentioEM()
 	GPIO->IFC = ~0;
 
 	// Enable Interrupt Service Routines
-	NVIC_EnableIRQ(GPIO_EVEN_IRQn);
-	NVIC_EnableIRQ(GPIO_ODD_IRQn);
+	NVIC_EnableIRQ( GPIO_EVEN_IRQn );
+	NVIC_EnableIRQ( GPIO_ODD_IRQn );
 #endif
 }
 
