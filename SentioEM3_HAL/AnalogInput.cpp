@@ -127,20 +127,20 @@ void AnalogInput::calibrateReference()
 	/* conversions to be complete. */
 	ADC_Reset( ADC0 );
 
-	ADC_Init_TypeDef       init       = ADC_INIT_DEFAULT;
+	ADC_Init_TypeDef       l_init       = ADC_INIT_DEFAULT;
 	ADC_InitSingle_TypeDef singleInit = ADC_INITSINGLE_DEFAULT;
 
 	/* Init common settings for both single conversion and scan mode */
-	init.timebase = ADC_TimebaseCalc( 0 );
+	l_init.timebase = ADC_TimebaseCalc( 0 );
 	/* Might as well finish conversion as quickly as possibly since polling */
 	/* for completion. */
 	/* Set ADC clock to 7 MHz, use default HFPERCLK */
-	init.prescale = ADC_PrescaleCalc( 7000000, 0 );
+	l_init.prescale = ADC_PrescaleCalc( 7000000, 0 );
 
 	/* Set an oversampling rate for more accuracy */
-	init.ovsRateSel = adcOvsRateSel4096;
+	l_init.ovsRateSel = adcOvsRateSel4096;
 	/* Leave other settings at default values */
-	ADC_Init( ADC0, &init );
+	ADC_Init( ADC0, &l_init );
 
 	/* Init for single conversion use, measure diff 0 with selected reference. */
 	singleInit.reference = _INT_ADC_REFERENCE;
