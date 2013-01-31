@@ -169,7 +169,7 @@ vpath %.cpp $(CXX_PATHS)
 vpath %.s   $(S_PATHS)
 
 .PHONY: all
-all: $(EXE_DIR)/$(MAINFILE).out $(EXE_DIR)/$(MAINFILE).bin
+all: $(EXE_DIR)/$(MAINFILE).bin
 
 .PHONY: doc
 doc:
