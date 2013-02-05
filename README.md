@@ -20,9 +20,13 @@ Install
 
 ### CodeSourcery gcc tools
 
-These tools can be obtained as binary version and source code from
-[Mentor Graphics](http://www.mentor.com). It is also available in the [Downloads
-section](https://github.com/mpfusion/sentio-framework/downloads).
+These tools can be obtained as binary version and source code from [Mentor
+Graphics](http://www.mentor.com). The binaries that were used during
+development are also available from the following site. The version is not
+kept up-to-date.
+
+- [Sourcery CodeBench Lite 2012.09-63 for ARM EABI - i636 linux binaries](http://wsn.itm.miun.se/files/sentio-em/arm-2012.09-63-arm-none-eabi-i686-pc-linux-gnu.tar.7z)
+- [Sourcery CodeBench Lite 2012.09-63 for ARM EABI - i636 windows binaries](http://wsn.itm.miun.se/files/sentio-em/arm-2012.09-63-arm-none-eabi-i686-mingw32.tar.7z)
 
 Unpack the archive and add the `bin` directory to your `PATH`, e.g. as
 follows:
@@ -40,8 +44,10 @@ These tools are only available as binaries and can be obtained from
 [energymicro](http://www.energymicro.com/). Here is a [link to the Linux 686
 binary
 package](http://cdn.energymicro.com/dl/packages/energyAwareTools_25052012.tgz)
-If this download is unavailable it can be found in the [Downloads
-section](https://github.com/mpfusion/sentio-framework/downloads).
+If this download is unavailable it can be found on the following site. The
+version is also not kept up-to-date.
+
+- [Energy Mirco energyAware tools for ARM - i686 linux binaries](http://wsn.itm.miun.se/files/sentio-em/energyAwareTools_25052012.tar.7z)
 
 Unpack the archive and add the `bin` directory to your `PATH`, e.g. as
 follows:
