@@ -21,21 +21,20 @@ CPU         = cortex-m3
 
 # Sourcery CodeBench tools from
 # https://sourcery.mentor.com/GNUToolchain/release2322
-LINUXCS   =
-WINDOWSCS =
 CMSISDIR  = $(SYSTEMDIR)/em_cmsis
 
+PATH_TEST_PRG = arm-none-eabi-gcc
 
 ifdef SystemRoot
-	TOOLDIR = $(ProgramFiles)/$(WINDOWSCS)
-	RM = "$(TOOLDIR)/bin/cs-rm" -rf
+	FULL_PRG = $(shell where $(PATH_TEST_PRG))
+	TOOLDIR  = $(patsubst %\bin\$(PATH_TEST_PRG).exe,%,$(FULL_PRG))
+	FLASH    = eACommander.exe
+	RM       = "$(TOOLDIR)/bin/cs-rm" -rf
 else
-	PATH_TEST_PRG = arm-none-eabi-gcc
-	FULL_PRG      = $(shell which $(PATH_TEST_PRG))
-	TOOLDIR       = $(patsubst %/bin/$(PATH_TEST_PRG),%,$(FULL_PRG))
-	PATH_FLASH    = eACommander.sh
-	FULL_FLASH    = $(shell which $(PATH_FLASH))
-	RM            = rm -rf
+	FULL_PRG = $(shell which $(PATH_TEST_PRG))
+	TOOLDIR  = $(patsubst %/bin/$(PATH_TEST_PRG),%,$(FULL_PRG))
+	FLASH    = eACommander.sh
+	RM       = rm -rf
 endif
 
 OBJ_DIR = build
@@ -219,8 +218,8 @@ clean:
 	
 .PHONY: flash
 flash:
-	sudo $(FULL_FLASH) \
+	$(FLASH) \
 		--verify                           \
 		--mode out                         \
 		--flash $(EXE_DIR)/$(MAINFILE).bin \
-		--reset || true                    \
+		--reset || true
