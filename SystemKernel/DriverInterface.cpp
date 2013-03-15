@@ -15,7 +15,8 @@ SHT1X_Sensirion DriverInterface::humid;
 AnalogInput     DriverInterface::luminance;
 LTC2990         DriverInterface::ltc2990;
 CONFEH          DriverInterface::confeh;
-XBEE_Radio      DriverInterface::radio;
+XBEE_Radio      DriverInterface::xbee;
+CC1101_Radio    DriverInterface::cc1101;
 
 void DriverInterface::codeError()
 {
