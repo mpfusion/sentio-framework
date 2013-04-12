@@ -515,19 +515,19 @@ ERROR_CODE Statemachine::startApplication( STATUS_BLOCK *statusBlock )
 }
 
 
-void Statemachine::_wrapperIRQ_default( uint32_t test )
+void Statemachine::_wrapperIRQ_default( uint32_t )
 {
 	while ( 1 );
 }
 
 
-void Statemachine::_wrapperIRQ_EVEN_default( uint32_t temp )
+void Statemachine::_wrapperIRQ_EVEN_default( uint32_t )
 {
 
 }
 
 
-void Statemachine::_wrapperIRQ_ODD_default( uint32_t temp )
+void Statemachine::_wrapperIRQ_ODD_default( uint32_t )
 {
 
 }

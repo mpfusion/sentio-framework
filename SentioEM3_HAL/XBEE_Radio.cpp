@@ -806,7 +806,7 @@ uint8_t XBEE_Radio::getReceivedSignal( uint8_t *rssi )
  *
  *******************************************************************************************************************************************/
 
-uint8_t XBEE_Radio::getSupplyVoltage( uint16_t *supplyVoltage )
+uint8_t XBEE_Radio::getSupplyVoltage( uint16_t* )
 {
 	return 0xFF;
 	//return configRegisterAccess( SupplyVoltage, (uint32_t*) supplyVoltage, 2 );
