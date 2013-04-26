@@ -475,7 +475,7 @@ ERROR_CODE Statemachine::startApplication( STATUS_BLOCK *statusBlock )
 
 	// Run the FSM until the execution is stopped by the Application-Code.
 	// The State-Function is called within the WHILE-STATEMENT !!!!
-	while ( ( *( stateDefinition )[statusBlock->nextState] )() )
+	while ( statusBlock->wantToSleep ? true : ( *( stateDefinition )[statusBlock->nextState] )() )
 	{
 		// Is the State-Function, which is selected for execution in the next step a valid one?
 		if ( currentStatusBlock->nextState < maxNumberOfStates )
