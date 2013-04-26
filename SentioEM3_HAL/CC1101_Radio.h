@@ -319,7 +319,6 @@ private:
 	uint8_t multi_register_access( uint8_t address, uint8_t access_mode, uint8_t *data, uint8_t length );
 	uint8_t read_register_SPI( uint8_t address, uint8_t access_mode );
 	uint8_t write_register_SPI( uint8_t address, uint8_t data );
-	uint8_t strobe( uint8_t strobe );
 	uint8_t getStatus();
 
 public:
@@ -353,6 +352,8 @@ public:
 	void setAddressCheck( bool state );
 	void setAddress( uint8_t address );
 	uint8_t getAddress();
+	
+	uint8_t strobe( uint8_t strobe );
 };
 
 #endif /* CC1101_RADIO_H_ */
