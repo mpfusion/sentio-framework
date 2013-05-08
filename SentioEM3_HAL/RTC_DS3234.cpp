@@ -141,15 +141,18 @@ void RTC_DS3234::initialize32kHzClock( bool batteryBacked, bool enableLFA, bool 
 
 	setSystemRegister( statusRegisterAddr, statusRegisterValue );
 
-	CMU->CTRL |= ( ( CMU->CTRL ) | CMU_CTRL_LFXOMODE_DIGEXTCLK );
+	CMU_ClockSelectSet( cmuClock_LFA, cmuSelect_LFXO );
 
-	CMU_ClockEnable( cmuClock_CORELE, true );
+	CMU->CTRL  = CMU_CTRL_LFXOMODE_DIGEXTCLK | CMU_CTRL_CLKOUTSEL1_LFXO | CMU_CTRL_CLKOUTSEL0_HFXO;
 
 	if ( enableLFA )
-		CMU_ClockSelectSet( cmuClock_LFA, cmuSelect_LFXO );
+		CMU_ClockEnable( cmuClock_LFA, true );
 
 	if ( enableLFB )
-		CMU_ClockSelectSet( cmuClock_LFB, cmuSelect_LFXO );
+		CMU_ClockEnable( cmuClock_LFB, true );
+
+	CMU_ClockEnable( cmuClock_CORELE, true );
+	CMU_ClockEnable( cmuClock_RTC, true );
 }
 
 

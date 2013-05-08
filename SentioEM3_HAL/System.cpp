@@ -52,16 +52,19 @@ void System::initializeSentioEM()
 	CMU_OscillatorEnable( cmuOsc_HFXO, false, false );
 #endif
 
-#if SentioEM_LF_Clock == INTERN
+#if SentioEM_LF_Clock == ON
 	CMU_ClockSelectSet( cmuClock_LFA, cmuSelect_LFRCO );
 
 	CMU_ClockEnable( cmuClock_CORELE, true );
 #endif
 
-#if SentioEM_LF_Clock == EXTERN
-	CMU->CTRL = CMU_CTRL_LFXOMODE_DIGEXTCLK;
+#if SentioEM_DebugClock == ON
+	CMU->ROUTE = CMU_ROUTE_LOCATION_LOC1 | CMU_ROUTE_CLKOUT1PEN | CMU_ROUTE_CLKOUT0PEN;
 
+	GPIO_PinModeSet( gpioPortD, 8, gpioModePushPull, 0 );
+	GPIO_PinModeSet( gpioPortC, 12, gpioModePushPull, 0 );
 #endif
+
 
 	CMU_ClockEnable( cmuClock_GPIO, true );
 
@@ -81,7 +84,7 @@ void System::initializeSentioEM()
 #endif
 
 
-#if SentioEM_GPIO_Interrupt == ON || SentioEM_OnBoard_Button == ON || numberOfButtonsUsed > 0
+#if SentioEM_GPIO_Interrupt == ON
 	// Clear Pending Interrupts before enable
 	GPIO->IFC = ~0;
 
