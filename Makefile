@@ -40,6 +40,7 @@ endif
 OBJ_DIR = build
 EXE_DIR = bin
 LST_DIR = lst
+DOC_DIR = doc
 
 MAINFILE = main
 
@@ -173,7 +174,7 @@ all: $(EXE_DIR)/$(MAINFILE).bin
 
 .PHONY: doc
 doc:
-	doxygen doc/Doxyfile
+	doxygen $(DOC_DIR)/Doxyfile
 
 $(OBJ_DIR):
 	mkdir $(OBJ_DIR)
@@ -215,7 +216,7 @@ $(EXE_DIR)/$(MAINFILE).bin: $(EXE_DIR)/$(MAINFILE).out
 
 .PHONY: clean
 clean:
-	$(RM) $(OBJ_DIR) $(LST_DIR) $(EXE_DIR) doc/html doc/latex
+	$(RM) $(OBJ_DIR) $(LST_DIR) $(EXE_DIR) $(DOC_DIR)/html $(DOC_DIR)/latex
 	
 .PHONY: flash
 flash:
