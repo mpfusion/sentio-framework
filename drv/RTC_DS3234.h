@@ -10,10 +10,10 @@
 
 #include "time.h"
 
-#include "efm32_gpio.h"
-#include "efm32_usart.h"
-#include "efm32_cmu.h"
-#include "efm32_rtc.h"
+#include "em_gpio.h"
+#include "em_usart.h"
+#include "em_cmu.h"
+#include "em_rtc.h"
 
 
 /****************************************************************************************************************************************//**

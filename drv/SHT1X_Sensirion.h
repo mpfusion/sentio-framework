@@ -8,7 +8,7 @@
 #ifndef SHT1X_HUMID_TEMP_H_
 #define SHT1X_HUMID_TEMP_H_
 
-#include "efm32_gpio.h"
+#include "em_gpio.h"
 #include "SystemConfig.h"
 
 

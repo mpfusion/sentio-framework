@@ -6,28 +6,18 @@
  */
 
 #include "DriverInterface.h"
-#include "SystemConfig.h"
 
+SENTIO_EM       DriverInterface::sentio;
 DebugInterface  DriverInterface::debug;
 RTC_DS3234      DriverInterface::timer;
-System          DriverInterface::sentio;
+
+/*
 SHT1X_Sensirion DriverInterface::humid;
 AnalogInput     DriverInterface::luminance;
 LTC2990         DriverInterface::ltc2990;
 CONFEH          DriverInterface::confeh;
 XBEE_Radio      DriverInterface::xbee;
-CC1101_Radio    DriverInterface::cc1101;
-
-void DriverInterface::codeError()
-{
-	for(ever)
-	{
-		sentio.LED_ToggleRed();
-
-		for(volatile uint32_t i = 0; i <320000; i++);
-	}
-}
-
+CC1101_Radio    DriverInterface::cc1101;*/
 
 
 

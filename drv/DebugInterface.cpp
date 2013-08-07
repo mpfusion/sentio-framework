@@ -4,14 +4,8 @@
  *  Created on: Jan 21, 2011
  *      Author: Matthias Krämer
  */
-
-#include "efm32.h"
-#include "efm32_gpio.h"
-#include "efm32_usart.h"
-#include "efm32_cmu.h"
-
 #include "DebugInterface.h"
-#include "SystemConfig.h"
+
 
 
 /****************************************************************************************************************************************//**

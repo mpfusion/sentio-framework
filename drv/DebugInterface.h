@@ -10,8 +10,10 @@
 
 #include "SystemConfig.h"
 #include "time.h"
-#include "efm32_usart.h"
-#include "efm32_gpio.h"
+
+#include "em_cmu.h"
+#include "em_usart.h"
+#include "em_gpio.h"
 
 
 

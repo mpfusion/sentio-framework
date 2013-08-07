@@ -663,7 +663,7 @@ bool RTC_DS3234::setBaseTime( time systemTime )
 	for ( uint8_t i = 0; i < 7; i++ )
 	{
 		// The MS-Bit of the Register 0x05 is always high, ( it contains the information, if we are in the 20 or 21th century )
-		// As long as our time-machine is not ordered jet :-) it is quite useless to make this bit dynamic.
+		// As long as our time-machine is not ordered :-) it is quite useless to make this bit dynamic.
 		if ( i == 5 )
 			setSystemRegister( i, ( ( calculateTimeReg( arrayAccess[i] ) ) | 0x80 ) );
 		else
@@ -759,7 +759,7 @@ bool RTC_DS3234::setAlarmPeriod( time alarmPeriod, ALARM_NUMBER alarm, ALARM_REG
 	// while Alarm 2 requires just the configuration of three control registers
 	for ( uint8_t i = 0; i < ( 5 - alarm ); i++ )
 	{
-		// The MASK of this Registers selects the different Alarm/Matching Options
+		//The MASK of this Registers selects the different Alarm/Matching Options
 		if ( temp & 0x01 )
 		{
 			setSystemRegister( ( i + RTC_AddressOffset ), calculateTimeReg( arrayAccess[i] ) | 0x80 );
@@ -767,7 +767,7 @@ bool RTC_DS3234::setAlarmPeriod( time alarmPeriod, ALARM_NUMBER alarm, ALARM_REG
 		else
 			setSystemRegister( ( i + RTC_AddressOffset ), calculateTimeReg( arrayAccess[i] ) );
 
-		// Prepare the Status register value
+		//Prepare the Status register value
 		temp >>= 1;
 	}
 
@@ -804,6 +804,7 @@ bool RTC_DS3234::setAlarmTime( time alarmTime, ALARM_NUMBER alarm, ALARM_REG_SET
 
 	uint8_t RTC_AddressOffset;
 	uint8_t temp = ( uint8_t ) MSB_Setting;
+	uint8_t numRegisters = 4;
 
 	switch ( alarm )
 	{
@@ -812,6 +813,7 @@ bool RTC_DS3234::setAlarmTime( time alarmTime, ALARM_NUMBER alarm, ALARM_REG_SET
 		break;
 	case 2:
 		RTC_AddressOffset = 0x0B;
+		numRegisters = 3;
 		break;
 	default:
 		return false;
@@ -819,7 +821,7 @@ bool RTC_DS3234::setAlarmTime( time alarmTime, ALARM_NUMBER alarm, ALARM_REG_SET
 
 	// Update the control registers of the DS3234 RTC, Alarm1: four registers beginning form the Offset are set,
 	// while Alarm 2 requires just the configuration of three control registers
-	for ( uint8_t i = 0; i < ( 5 - alarm ); i++ )
+	for ( uint8_t i = 0; i < numRegisters; i++ )
 	{
 		// The MASK of this Registers selects the different Alarm/Matching Options
 		if ( temp & 0x01 )
@@ -866,6 +868,7 @@ bool RTC_DS3234::getAlarmTime( time &alarmTime, ALARM_NUMBER alarm, ALARM_REG_SE
 	uint8_t MSB_SettingTemp = 0;
 
 	uint8_t *arrayAccess = alarmTime.getArrayAccess();
+	uint8_t numRegisters = 4;
 
 	switch ( alarm )
 	{
@@ -874,12 +877,15 @@ bool RTC_DS3234::getAlarmTime( time &alarmTime, ALARM_NUMBER alarm, ALARM_REG_SE
 		break;
 	case 2:
 		RTC_AddressOffset = 0x0B;
+		numRegisters = 3;
 		break;
 	default:
 		return false;
 	}
+	
+	uint8_t test = alarm;
 
-	for ( uint8_t i = 0; i < ( 5 - alarm ) ; i++ )
+	for ( volatile uint8_t i = 0; i < numRegisters; i++ )
 	{
 		temp = getSystemRegister( RTC_AddressOffset + i );
 
@@ -888,7 +894,7 @@ bool RTC_DS3234::getAlarmTime( time &alarmTime, ALARM_NUMBER alarm, ALARM_REG_SE
 			MSB_SettingTemp |= ( 0x01 << i );
 
 		}
-
+		
 		arrayAccess[i] = calculateInverseTimeReg( temp & 0x7F );
 	}
 

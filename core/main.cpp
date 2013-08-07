@@ -5,13 +5,9 @@
  *      Author: Matthias Krämer
  */
 
-#include "efm32.h"
-#include "efm32_chip.h"
-#include "SystemConfig.h"
+#include "application.h"
 
-#include USERCODE_FILENAME
-USERCODE_CLASSNAME    application;
-
+APPLICATION    application;
 
 /****************************************************************************************************************************************//**
  * @brief Main Application-Code
@@ -20,14 +16,8 @@ USERCODE_CLASSNAME    application;
 
 int main(void)
 {
-	// Initialize chip, apply workaround and bug-fixes which are dependent on the chip-revision
-	CHIP_Init();
-
-	application.sentio.initializeSentioEM();
-
-
-	application.setupApplication();
-	application.executeApplication();
+	application.init();
+	application.run();
 
 	return 0;
 }

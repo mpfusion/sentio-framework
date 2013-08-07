@@ -6,7 +6,7 @@
  */
 
 #include "ConfEH.h"
-#include "efm32_gpio.h"
+#include "em_gpio.h"
 #include "LTC2990.h"
 #include "SystemConfig.h"
 

@@ -9,29 +9,31 @@
 #define DRIVERINTERFACE_H_
 
 
-#include "DebugInterface.h"
-#include "AnalogInput.h"
-#include "System.h"
+#include "sentio_em.h"
+
 #include "RTC_DS3234.h"
+#include "DebugInterface.h"
+/*
+#include "AnalogInput.h"
 #include "SHT1X_Sensirion.h"
 #include "ConfEH.h"
 #include "XBEE_Radio.h"
-#include "CC1101_Radio.h"
+#include "CC1101_Radio.h"*/
 
 
 class DriverInterface {
 public:
+	static SENTIO_EM        sentio;
 	static DebugInterface  debug;
 	static RTC_DS3234      timer;
-	static System          sentio;
-	static SHT1X_Sensirion humid;
-	static AnalogInput     luminance;
-	static LTC2990         ltc2990;
-	static CONFEH          confeh;
-	static XBEE_Radio      xbee;
-	static CC1101_Radio    cc1101;
+// 	static SHT1X_Sensirion humid;
+// 	static AnalogInput     luminance;
+// 	static LTC2990         ltc2990;
+// 	static CONFEH          confeh;
+// 	static XBEE_Radio      xbee;
+// 	static CC1101_Radio    cc1101;
 
-	static void codeError();
+	//static void codeError();
 
 	DriverInterface(){}
 	~DriverInterface(){}
