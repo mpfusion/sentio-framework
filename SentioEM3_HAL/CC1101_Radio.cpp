@@ -115,11 +115,14 @@ void CC1101_Radio::sendPacket( uint8_t type, uint8_t addr = 0, uint8_t* payload 
  */
 void CC1101_Radio::readPacket()
 {
-	receive_buffer.fields.length = read_register_SPI( CC1101_RXFIFO, CC1101_READ_SINGLE );
+	if ( receive_buffer.fields.length <= 62 )
+	{
+		receive_buffer.fields.length = read_register_SPI( CC1101_RXFIFO, CC1101_READ_SINGLE );
 
-	// Read the data from the RXFIFO
-	multi_register_access( CC1101_RXFIFO, CC1101_READ_BURST, ( uint8_t* )&receive_buffer.bytes[1], receive_buffer.fields.length );
-	multi_register_access( CC1101_RXFIFO, CC1101_READ_BURST, ( uint8_t* )&receive_buffer.fields.rssi, 2 );
+		// Read the data from the RXFIFO
+		multi_register_access( CC1101_RXFIFO, CC1101_READ_BURST, ( uint8_t* )&receive_buffer.bytes[1], receive_buffer.fields.length );
+		multi_register_access( CC1101_RXFIFO, CC1101_READ_BURST, ( uint8_t* )&receive_buffer.fields.rssi, 2 );
+	}
 }
 
 /*
