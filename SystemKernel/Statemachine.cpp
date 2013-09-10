@@ -52,7 +52,6 @@ void DMA_IRQHandler()
 void GPIO_EVEN_IRQHandler()
 {
 	( *Statemachine::wrapperGPIO_EVEN_IRQ[Statemachine::currentStatusBlock->applicationID] )( GPIO->IF );
-	Statemachine::_wrapperIRQ_EVEN_default( GPIO->IF );
 }
 
 
