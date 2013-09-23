@@ -319,12 +319,12 @@ private:
 	uint8_t multi_register_access( uint8_t address, uint8_t access_mode, uint8_t *data, uint8_t length );
 	uint8_t read_register_SPI( uint8_t address, uint8_t access_mode );
 	uint8_t write_register_SPI( uint8_t address, uint8_t data );
-	uint8_t getStatus();
 
 public:
 	CC1101_Radio();
 	~CC1101_Radio() {}
 
+	uint8_t getStatus();
 	void initializeInterface();
 	void setRfConfig();
 	void initializeRadioInterrupt2( bool rising, bool falling );
