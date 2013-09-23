@@ -444,5 +444,5 @@ uint8_t CC1101_Radio::strobe( uint8_t l_strobe )
  */
 uint8_t CC1101_Radio::getStatus()
 {
-	return read_register_SPI( CC1101_SNOP, CC1101_READ_BURST );
+	return strobe( CC1101_SNOP );
 }
